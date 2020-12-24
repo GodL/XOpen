@@ -45,7 +45,7 @@ struct XOpen: ParsableCommand {
     }
     
     func open(path: Path) throws {
-        try shellOut(to: "open \(path.lastComponent)")
+        try shellOut(to: "open \(path.string)")
     }
 }
 
