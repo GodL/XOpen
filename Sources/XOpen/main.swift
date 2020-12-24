@@ -4,10 +4,19 @@ import PathKit
 import ShellOut
 
 struct XOpen: ParsableCommand {
-
+    
+    @Argument(help: "A keyword to match the file to open")
+    var keyword: String?
+    
     func run() throws {
     
         let paths: [Path] = try findXocdeProject()
+        
+        if let key = keyword?.lowercased(), let path = paths.first(where: { $0.lastComponent.lowercased().contains(key) }) {
+            try open(path: path)
+            return
+        }
+        
         if let workspace = paths.first(where: { $0.lastComponent.hasSuffix(".xcworkspace") }) {
             try open(path: workspace)
         }else if let xcodeproj = paths.first(where: { $0.lastComponent.hasSuffix(".xcodeproj") }) {
